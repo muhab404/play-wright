@@ -8,8 +8,8 @@ WORKDIR /app
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set the Lambda runtime interface client
-RUN pip install aws-lambda-py
+# # Set the Lambda runtime interface client
+# RUN pip install aws-lambda-py
 
 # Copy application files
 COPY app/ .
