@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/playwright/python:v1.44.0-jammy
 WORKDIR /app
 
 # Install Python packages
-COPY app/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # # Set the Lambda runtime interface client
