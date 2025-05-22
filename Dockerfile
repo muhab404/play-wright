@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ .
 
 # Define handler for AWS Lambda
-CMD ["handler.lambda_handler"]
+CMD ["app.handler.lambda_handler"]
