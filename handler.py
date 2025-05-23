@@ -95,8 +95,7 @@ def lambda_handler(event, context):
     # export_book_data(username, password, book_id, download_folder)
     # return {"status": "success"}
     try:
-        book_id = event.get("pathParameters", {}).get("book_id")
-
+        book_id = event['pathParameters'].get('book_id')
         if not book_id:
             return {
                 "statusCode": 400,
