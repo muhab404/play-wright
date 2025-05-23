@@ -65,6 +65,7 @@ def export_book_data(username, password, book_id, download_dir):
 
         # 10. Trigger download and wait for it
         with page.expect_download() as download_info:
+            page.locator('i.glyphicon-cloud-download').nth(2).click()
             # Wait for the download button to be visible
             screenshot_path = "/tmp/debug_before_download.png"
             page.screenshot(path=screenshot_path)
@@ -75,7 +76,7 @@ def export_book_data(username, password, book_id, download_dir):
                 f"debug/{book_id}_before_download.png"
             )
             page.wait_for_selector('a.show-loading.btn-mc-white-blue', state='visible', timeout=180000)
-            page.click('a.show-loading.btn-mc-white-blue', timeout=180000)  # Actual download button
+            page.locator('i.glyphicon-cloud-download').nth(2).click()  # Actual download button
 
         download = download_info.value
 
