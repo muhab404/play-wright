@@ -82,6 +82,8 @@ def export_book_data(username, password, book_id, download_dir):
         # Save to desired path
         download_path = Path(download_dir) / f"{book_id}_export.xlsx"
         download.save_as(str(download_path))
+        # Upload to S3
+        upload_to_s3(str(download_path), "playwright-lambda-fenction", f"exports/{book_id}_export.xlsx")
 
         print(f"✅ Downloaded file saved to: {download_path}")
 
