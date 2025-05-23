@@ -1,10 +1,11 @@
+import json
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 # Hardcoded login and export info
 username = "to.ebner"
 password = "Metis4149"
-book_id = "978-3968901688"
+# book_id = "978-3968901688"
 download_folder = "/tmp"
 
 import boto3
@@ -91,8 +92,25 @@ def export_book_data(username, password, book_id, download_dir):
 
 
 def lambda_handler(event, context):
-    export_book_data(username, password, book_id, download_folder)
-    return {"status": "success"}
+    # export_book_data(username, password, book_id, download_folder)
+    # return {"status": "success"}
+    book_id = event.get("book_id")
+    if not book_id:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Missing book_id"})
+        }
 
+    try:
+        file_path = export_book_data(username, password, book_id, download_folder)
+        return {
+            "statusCode": 200,
+            "body": json.dumps({"message": "Download complete", "file": file_path})
+        }
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
 # if __name__ == "__main__":
 #     export_book_data(username, password, book_id, download_folder)
