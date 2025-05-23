@@ -95,8 +95,7 @@ def lambda_handler(event, context):
     # export_book_data(username, password, book_id, download_folder)
     # return {"status": "success"}
     try:
-        body = json.loads(event.get("body", "{}"))
-        book_id = body.get("book_id")
+        book_id = event.get("pathParameters", {}).get("book_id")
 
         if not book_id:
             return {
@@ -116,5 +115,6 @@ def lambda_handler(event, context):
         return {
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
-        }# if __name__ == "__main__":
+        }
+# if __name__ == "__main__":
 #     export_book_data(username, password, book_id, download_folder)
