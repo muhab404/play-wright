@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # # Set the Lambda runtime interface client
 # RUN pip install aws-lambda-py
+RUN pip install awslambdaric
 
 # Copy application files
 COPY . .
