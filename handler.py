@@ -94,23 +94,27 @@ def export_book_data(username, password, book_id, download_dir):
 def lambda_handler(event, context):
     # export_book_data(username, password, book_id, download_folder)
     # return {"status": "success"}
-    book_id = event.get("book_id")
-    if not book_id:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": "Missing book_id"})
-        }
-
     try:
-        file_path = export_book_data(username, password, book_id, download_folder)
+        body = json.loads(event.get("body", "{}"))
+        book_id = body.get("book_id")
+
+        if not book_id:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": "Missing book_id"})
+            }
+
+        # Run your export function
+        export_book_data(username, password, book_id, download_folder)
+
         return {
             "statusCode": 200,
-            "body": json.dumps({"message": "Download complete", "file": file_path})
+            "body": json.dumps({"message": f"Export started for book_id: {book_id}"})
         }
+
     except Exception as e:
         return {
             "statusCode": 500,
             "body": json.dumps({"error": str(e)})
-        }
-# if __name__ == "__main__":
+        }# if __name__ == "__main__":
 #     export_book_data(username, password, book_id, download_folder)
