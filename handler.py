@@ -7,6 +7,12 @@ password = "Metis4149"
 book_id = "978-3968901688"
 download_folder = "/tmp"
 
+import boto3
+
+def upload_to_s3(local_path, bucket, key):
+    s3 = boto3.client('s3')
+    s3.upload_file(local_path, bucket, key)
+
 def export_book_data(username, password, book_id, download_dir):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True,
@@ -61,7 +67,14 @@ def export_book_data(username, password, book_id, download_dir):
         with page.expect_download() as download_info:
             # Wait for the download button to be visible
             page.wait_for_selector('a.show-loading.btn-mc-white-blue', state='visible', timeout=60000)
-
+            screenshot_path = "/tmp/debug_before_download.png"
+            page.screenshot(path=screenshot_path)
+            # Upload to S3
+            upload_to_s3(
+                screenshot_path,
+                "playwright-lambda-fenction",  # Replace with your bucket name
+                f"debug/{book_id}_before_download.png"
+            )
             page.click('a.show-loading.btn-mc-white-blue', timeout=60000)  # Actual download button
 
         download = download_info.value
