@@ -59,7 +59,10 @@ def export_book_data(username, password, book_id, download_dir):
 
         # 10. Trigger download and wait for it
         with page.expect_download() as download_info:
-            page.click('a.show-loading.btn-mc-white-blue')  # Actual download button
+            # Wait for the download button to be visible
+            page.wait_for_selector('a.show-loading.btn-mc-white-blue', state='visible', timeout=60000)
+
+            page.click('a.show-loading.btn-mc-white-blue', timeout=60000)  # Actual download button
 
         download = download_info.value
 
