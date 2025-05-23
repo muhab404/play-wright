@@ -75,7 +75,6 @@ def export_book_data(username, password, book_id, download_dir):
                 "playwright-lambda-fenction",  # Replace with your bucket name
                 f"debug/{book_id}_before_download.png"
             )
-            page.wait_for_selector('a.show-loading.btn-mc-white-blue', state='visible', timeout=180000)
             page.locator('i.glyphicon-cloud-download').nth(2).click()  # Actual download button
 
         download = download_info.value
