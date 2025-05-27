@@ -1,0 +1,15 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+  build:
+    commands:
+      - docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+env:
+  variables:
+    AWS_DEFAULT_REGION: us-east-1
+    ECR_REGISTRY: 954976303264.dkr.ecr.us-east-1.amazonaws.com
+    ECR_REPOSITORY: playwright-lambda
+    IMAGE_TAG: latest

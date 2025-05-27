@@ -1,0 +1,8 @@
+/lambda-tmp
+/lambda-tmp/*
+/lambda-tmp/p*
+/lambda-tmp/p*/*
+Dockerfile1
+handler-c*
+*.json
+test.py
