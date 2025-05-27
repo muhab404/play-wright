@@ -18,9 +18,13 @@ download_folder = "/tmp"
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 
+FOLDER_ID = os.environ.get('FOLDER_ID')
+if not FOLDER_ID:
+    raise Exception("FOLDER_ID environment variable not set")
+
 
 # Set the folder ID where you want to upload the file
-FOLDER_ID = '1J_rz5SjoyYEsCPdXfHjxY0YoRg_0xzIT'  # Replace with the actual folder ID
+# FOLDER_ID = '1dIa8wA85QdmE08Iy3nwZ-aii7MzeTA6v'  # Replace with the actual folder ID
 
 
 def write_service_account_key():
