@@ -96,8 +96,14 @@ def export_book_data(username, password, book_id, download_dir, drive_service):
         page.select_option('select.sort-selection', '1')
 
         # 7. Select period
+        # page.click('button.dp-ext-replace-button')
+        # page.wait_for_selector('#date-picker-dropdown-container', state='visible')
+        # page.click('//i[text()="Year to Date"]')
+        # page.wait_for_load_state('networkidle')
+
         page.click('button.dp-ext-replace-button')
         page.wait_for_selector('#date-picker-dropdown-container', state='visible')
+        page.click("#date-picker-dropdown-container > div:nth-child(1) > ul > li:nth-child(1) > button")
         page.click('//i[text()="Year to Date"]')
         page.wait_for_load_state('networkidle')
 
@@ -107,11 +113,12 @@ def export_book_data(username, password, book_id, download_dir, drive_service):
 
         # 9. Open export dropdown
         page.click('#toolbar-benchmark-spin-button > i')
-        page.locator('a[data-ember-action="1012"]').click()
-
+        # page.locator('a[data-ember-action="1012"]').click()
+        page.select_option("#ember1014", value="1000")
         # 10. Trigger download and wait for it
         with page.expect_download() as download_info:
-            page.locator('i.glyphicon-cloud-download').nth(2).click()
+            # page.locator('i.glyphicon-cloud-download').nth(2).click()
+            page.click('a[data-ember-action="1012"]')
             # Wait for the download button to be visible
             screenshot_path = "/tmp/debug_before_download.png"
             page.screenshot(path=screenshot_path)
