@@ -37,28 +37,61 @@ def write_service_account_key():
     else:
         raise Exception("GOOGLE_CREDS_JSON environment variable not set")
 
-def upload_to_drive(service, file_path, folder_id):
-    """Upload file to Google Drive"""
-    file_metadata = {
-        'name': os.path.basename(file_path),
-        'parents': [FOLDER_ID]
-    }
+# def upload_to_drive(service, file_path, folder_id):
+#     """Upload file to Google Drive"""
+#     file_metadata = {
+#         'name': os.path.basename(file_path),
+#         'parents': [FOLDER_ID]
+#     }
     
-    # If folder_id is provided, upload to specific folder
-    if folder_id:
-        file_metadata['parents'] = [folder_id]
+#     # If folder_id is provided, upload to specific folder
+#     if folder_id:
+#         file_metadata['parents'] = [folder_id]
     
-    media = MediaFileUpload(file_path, resumable=True)
+#     media = MediaFileUpload(file_path, resumable=True)
     
-    file = service.files().create(
-        body=file_metadata,
-        media_body=media,
-        fields='id'
-    ).execute()
+#     file = service.files().create(
+#         body=file_metadata,
+#         media_body=media,
+#         fields='id'
+#     ).execute()
     
-    print('File uploaded with ID:', file.get('id'))
-    return file.get('id')
+#     print('File uploaded with ID:', file.get('id'))
+#     return file.get('id')
 
+def upload_to_drive(service, file_path, folder_id):
+    """Upload file to Google Drive with Shared Drive support"""
+    try:
+        file_metadata = {
+            'name': os.path.basename(file_path),
+        }
+        
+        if folder_id:
+            file_metadata['parents'] = [folder_id]
+        
+        media = MediaFileUpload(file_path, resumable=True)
+        
+        file = service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields='id',
+            supportsAllDrives=True,
+            # If you know it's definitely a Shared Drive, you can also add:
+            # driveId='your-shared-drive-id'  # Optional
+        ).execute()
+        
+        print('✅ File uploaded with ID:', file.get('id'))
+        return file.get('id')
+    
+    except Exception as e:
+        print(f"❌ Error uploading to Google Drive: {e}")
+        # You might want to inspect the error more carefully
+        if hasattr(e, 'content'):
+            error_details = json.loads(e.content)
+            print("Error details:", error_details)
+        raise  # Re-raise the exception after logging
+
+    
 def export_book_data(username, password, book_id, download_dir, drive_service):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True,
